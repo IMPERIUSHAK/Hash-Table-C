@@ -54,13 +54,15 @@ ht_hash_table* ht_new(){
 
 static ht_hash_table* ht_new_sized(const int base_size) {
     
-    ht_hash_table* ht = xmalloc(sizeof(ht_del_hash_table));
+    ht_hash_table* ht = malloc(sizeof(ht_hash_table));
     ht->base_size = base_size;
 
     ht->size = next_prime(ht->base_size);
 
     ht->count = 0;
-    ht->items = xcalloc((size_t)ht->size, sizeof(ht_item*));
+    ht->items = calloc((size_t)ht->size, sizeof(ht_item*));
+
+    return ht;
 }
 
 ht_hash_table* ht_new() {
@@ -174,7 +176,7 @@ void ht_insert(ht_hash_table *ht, const char* key, const char* value) {
     
     const int load = ht->count * 100 /  ht->size;
     if (load > 70) {
-        ht_resizeup(ht);
+        ht_resize_up(ht);
     }
 
     ht_item* item = ht_new_item(key, value);
